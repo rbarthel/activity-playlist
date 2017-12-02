@@ -7,7 +7,11 @@
   font-family: 'Roboto', sans-serif;
 }
 
-
+.disabled {
+  cursor: not-allowed;
+  background-color: rgb(229, 229, 229) !important;
+  color: #c0c0c0;
+}
 
 input {
  border: 0;
