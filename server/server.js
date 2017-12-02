@@ -52,6 +52,27 @@ app.delete('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
   });
 })
 
+// generate a playlist based on a query
+app.get('/playlists/new/:query', (req, res) => {
+  const playlistData = helpers.getPlaylistsQuery(req.params.query);
+  console.log('58', playlistData);
+
+  const trackIDs = [];
+
+  playlistData.forEach((playlist) => {
+
+    const tracksInPlaylist = helpers.getTracksInPlaylist(playlist);
+    console.log('62', tracksInPlaylist);
+
+    tracksInPlaylist.forEach((track) => {
+      trackIDs.push(track);
+    });
+
+  });
+
+  res.send(trackIDs);
+})
+
 // search for a playlist based on a query
 app.get('/search/playlists/:query', (req, res) => {
   const options = {
@@ -62,8 +83,7 @@ app.get('/search/playlists/:query', (req, res) => {
   };
   request(options, function(err, response, body) {
     if (response.statusCode === 200) {
-      console.log(helpers.extractTrackRequestURLs(body));
-      res.send(helpers.extractTrackRequestURLs(body));
+      res.send(body);
     } else {
       res.sendStatus(400);
     }
