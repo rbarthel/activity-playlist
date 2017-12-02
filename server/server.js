@@ -1,4 +1,5 @@
 require('dotenv').config();
+const helpers = require('./serverHelpers');
 const request = require('request');
 const express = require('express');
 const app = express();
@@ -57,7 +58,7 @@ app.get('/search/playlists/:query', (req, res) => {
   };
   request(options, function(err, response, body) {
     if (response.statusCode === 200) {
-      res.send(body);
+      res.send(helpers.extractTrackRequestURLs(body));
     } else {
       res.sendStatus(400);
     }
