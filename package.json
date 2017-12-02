@@ -19,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/rbarthel/activity-playlist/issues"
   },
-  "homepage": "https://github.com/rbarthel/activity-playlist#readme"
+  "homepage": "https://github.com/rbarthel/activity-playlist#readme",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "request": "^2.83.0"
+  }
 }
