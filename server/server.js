@@ -85,6 +85,23 @@ app.post('/users/:owner_id/playlists/new/:playlist_name', (req, res) => {
   });
 })
 
+app.post('/users/:user_id/playlists/:playlist_id/tracks/:track_uris', (req, res) => {
+  const options = {
+    url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}/tracks?uris=${req.params.track_uris}`,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+    },
+  };
+  request(options, function(err, response, body) {
+    if (response.statusCode === 201) {
+      res.send(body);
+    } else {
+      res.sendStatus(400);
+    }
+  });
+})
+
 app.listen(8080, () => {
   console.log('Listening on port 8080');
 });
@@ -92,7 +109,7 @@ app.listen(8080, () => {
 // @ - PUT     /v1/users/{owner_id}/playlists/{playlist_id}/followers // follows a playlist
 // @ - DELETE /v1/users/{owner_id}/playlists/{playlist_id}/followers // unfollows a playlist
 // @ - GET     /v1/search?type=playlist // search for a playlist
-// - POST    /v1/users/{user_id}/playlists // create a playlist
-// - POST    /v1/users/{user_id}/playlists/{playlist_id}/tracks // add tracks to a playlist
+// @ - POST    /v1/users/{user_id}/playlists // create a playlist
+// @ - POST    /v1/users/{user_id}/playlists/{playlist_id}/tracks // add tracks to a playlist
 // - PUT     /v1/users/{user_id}/playlists/{playlist_id} // update playlist details
 // - DELETE /v1/users/{user_id}/playlists/{playlist_id}/tracks // remove tracks from a playlist
