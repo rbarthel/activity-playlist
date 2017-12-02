@@ -6,6 +6,7 @@ const express = require('express');
 const app = express();
 
 app.use(cors());
+app.options('*', cors())
 
 // follows a playlist
 app.put('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
