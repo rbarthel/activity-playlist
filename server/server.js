@@ -14,7 +14,7 @@ app.put('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
     method: 'PUT',
     json: true,
     headers: {
-      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+      'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
     },
     body: {
       'public': false
@@ -36,7 +36,7 @@ app.delete('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
     method: 'DELETE',
     json: true,
     headers: {
-      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+      'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
     },
     body: {
       'public': false
@@ -56,11 +56,12 @@ app.get('/search/playlists/:query', (req, res) => {
   const options = {
     url: `https://api.spotify.com/v1/search?q=${req.params.query}&type=playlist`,
     headers: {
-      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+      'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
     }
   };
   request(options, function(err, response, body) {
     if (response.statusCode === 200) {
+      console.log(helpers.extractTrackRequestURLs(body));
       res.send(helpers.extractTrackRequestURLs(body));
     } else {
       res.sendStatus(400);
@@ -73,7 +74,7 @@ app.get('/users/:user_id/playlists/:playlist_id/tracks', (req, res) => {
   const options = {
     url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}/tracks`,
     headers: {
-      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+      'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
     }
   };
   request(options, function(err, response, body) {
@@ -92,7 +93,7 @@ app.post('/users/:owner_id/playlists/new/:playlist_name', (req, res) => {
     method: 'POST',
     json: true,
     headers: {
-      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+      'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
     },
     body: {
       "description": "created by activity-playlist",
@@ -115,7 +116,7 @@ app.post('/users/:user_id/playlists/:playlist_id/tracks/:track_uris', (req, res)
     url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}/tracks?uris=${req.params.track_uris}`,
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+      'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
     },
   };
   request(options, function(err, response, body) {
