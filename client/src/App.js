@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Header from "./components/Header";
+import SearchBar from "./components/SearchBar"
+import spotify from './images/spotify.png';
 import './App.css';
 
 class App extends Component {
@@ -7,15 +9,18 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <img src={spotify} className="App-logo" alt="logo" />
+          <Header />
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          To get started, what kind of activity are you doing?
         </p>
+
+        <SearchBar />
       </div>
     );
   }
 }
 
 export default App;
+
