@@ -23,7 +23,7 @@ class App extends Component {
       alert('Please enter a value to search');
     } else {
      jQuery.ajax({
-        url: `https://localhost:8080/search/playlists/${this.state.value}`,
+        url: `localhost:8080/search/playlists/${this.state.value}`,
         dataType: 'json',
         success: function(data) {
           console.log(data);
