@@ -1,0 +1,22 @@
+{
+  "name": "activity-playlist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbarthel/activity-playlist.git"
+  },
+  "keywords": [
+    "spotify"
+  ],
+  "author": "Natalie Mok, Russell Barthel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbarthel/activity-playlist/issues"
+  },
+  "homepage": "https://github.com/rbarthel/activity-playlist#readme"
+}
