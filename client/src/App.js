@@ -12,11 +12,13 @@ class App extends Component {
           <img src={spotify} className="App-logo" alt="logo" />
           <Header />
         </header>
-        <p className="App-intro">
-          To get started, what kind of activity are you doing?
-        </p>
+        <div className='App-search-form'>
+          <p className="App-intro">
+            To get started, what kind of activity are you doing?
+          </p>
 
-        <SearchBar />
+          <SearchBar />
+        </div>
       </div>
     );
   }

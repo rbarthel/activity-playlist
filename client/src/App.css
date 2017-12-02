@@ -1,9 +1,10 @@
 .App {
   text-align: center;
+   font-family: 'Roboto', sans-serif;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
+  animation: App-logo-spin infinite 10s linear;
   height: 80px;
 }
 
@@ -20,6 +21,10 @@
 
 .App-intro {
   font-size: large;
+}
+
+.App-search-form {
+  padding: 70px 0;
 }
 
 @keyframes App-logo-spin {

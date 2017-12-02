@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
+import './SearchBar.css'
 
 class SearchBar extends Component {
   render() {
     return (
-      <input style={{width: '500px', height:'50px', fontSize: '35px', textAlign: 'center'}} type='text' />
+      <form>
+        <input className='SearchBar-input' type='text' />
+        <br />
+        <button className='button SearchBar-submit'>Submit</button>
+      </form>
     )
   }
 }
