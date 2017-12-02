@@ -1,7 +1,11 @@
 require('dotenv').config();
+const cors = require('cors');
+const helpers = require('./serverHelpers');
 const request = require('request');
 const express = require('express');
 const app = express();
+
+app.use(cors());
 
 // follows a playlist
 app.put('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
@@ -57,7 +61,7 @@ app.get('/search/playlists/:query', (req, res) => {
   };
   request(options, function(err, response, body) {
     if (response.statusCode === 200) {
-      res.send(body);
+      res.send(helpers.extractTrackRequestURLs(body));
     } else {
       res.sendStatus(400);
     }
