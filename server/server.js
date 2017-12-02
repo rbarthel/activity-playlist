@@ -3,7 +3,7 @@ const request = require('request');
 const express = require('express');
 const app = express();
 
-
+// follows a playlist
 app.put('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
   const options = {
     url: `https://api.spotify.com/v1/users/${req.params.owner_id}/playlists/${req.params.playlist_id}/followers`,
@@ -25,6 +25,7 @@ app.put('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
   });
 })
 
+// unfollows a playlist
 app.delete('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
   const options = {
     url: `https://api.spotify.com/v1/users/${req.params.owner_id}/playlists/${req.params.playlist_id}/followers`,
@@ -46,11 +47,12 @@ app.delete('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
   });
 })
 
+// search for a playlist based on a query
 app.get('/search/playlists/:query', (req, res) => {
   const options = {
     url: `https://api.spotify.com/v1/search?q=${req.params.query}&type=playlist`,
     headers: {
-      'Authorization': 'Bearer BQB7J1lIf8LoUSg1REIGEVxnmMcfFGcbrc5bJfKV3S11WhYkCUW1FyhuX2zww_Yzcz_mnsRfvdQ2OnyJ7hEznvLROKDvC21O_c-Rl-wOg2V8RtRSIOnGcnX0p0z0dkJIPb6IIWfwOgOEev7ImzLHrkEG3Fb1m13cyadOqXBmwiZLWJXkj6Yx3y6aLVqqVoU4xdA'
+      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
     }
   };
   request(options, function(err, response, body) {
@@ -62,6 +64,24 @@ app.get('/search/playlists/:query', (req, res) => {
   });
 })
 
+// get tracks in a playlist
+app.get('/users/:user_id/playlists/:playlist_id/tracks', (req, res) => {
+  const options = {
+    url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}/tracks`,
+    headers: {
+      'Authorization': `Bearer ${process.env.GITHUB_AUTH}`
+    }
+  };
+  request(options, function(err, response, body) {
+    if (response.statusCode === 200) {
+      res.send(body);
+    } else {
+      res.sendStatus(400);
+    }
+  });
+})
+
+// create a playlist
 app.post('/users/:owner_id/playlists/new/:playlist_name', (req, res) => {
   const options = {
     url: `https://api.spotify.com/v1/users/${req.params.owner_id}/playlists`,
@@ -85,6 +105,7 @@ app.post('/users/:owner_id/playlists/new/:playlist_name', (req, res) => {
   });
 })
 
+// add tracks to a playlist
 app.post('/users/:user_id/playlists/:playlist_id/tracks/:track_uris', (req, res) => {
   const options = {
     url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}/tracks?uris=${req.params.track_uris}`,
@@ -105,6 +126,8 @@ app.post('/users/:user_id/playlists/:playlist_id/tracks/:track_uris', (req, res)
 app.listen(8080, () => {
   console.log('Listening on port 8080');
 });
+
+
 
 // @ - PUT     /v1/users/{owner_id}/playlists/{playlist_id}/followers // follows a playlist
 // @ - DELETE /v1/users/{owner_id}/playlists/{playlist_id}/followers // unfollows a playlist
