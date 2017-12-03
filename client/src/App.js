@@ -30,8 +30,11 @@ class App extends Component {
       alert('Please enter a value to search');
     } else {
        jQuery.ajax({
-        url: `http://localhost:8080/users/__natsy/playlists/new/${this.state.value}`,
+        url: `http://localhost:8080/playlists/new/${this.state.value}/`,
         dataType: "json",
+        data: {
+          token: { this.state.token }
+        },
         success: function(data) {
           this.setState({ greeting: `Your curated playlist for ${this.state.value}`, playlistUri: data });
         }.bind(this),
