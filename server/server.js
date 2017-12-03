@@ -53,24 +53,31 @@ app.delete('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
 })
 
 // generate a playlist based on a query
-app.get('/playlists/new/:query', (req, res) => {
-  const playlistData = helpers.getPlaylistsQuery(req.params.query);
-  console.log('58', playlistData);
-
-  const trackIDs = [];
-
-  playlistData.forEach((playlist) => {
-
-    const tracksInPlaylist = helpers.getTracksInPlaylist(playlist);
-    console.log('62', tracksInPlaylist);
-
-    tracksInPlaylist.forEach((track) => {
-      trackIDs.push(track);
+app.get('/users/:user_id/playlists/new/:query', (req, res) => {
+  helpers.getPlaylistsQuery(req.params.query).then((playlistData) => {
+    const trackIDs = [];
+    const promises = playlistData.map((playlist) => {
+      return (
+        helpers.getTracksInPlaylist(playlist.user_id, playlist.playlist_id).then((tracksInPlaylist) => {
+          tracksInPlaylist.forEach((track) => {
+            trackIDs.push(`spotify:track:${track}`);
+          });
+        })
+      )
     });
-
-  });
-
-  res.send(trackIDs);
+    const newPlaylist = helpers.createPlaylist(req.params.user_id, `Playlist for: ${req.params.query}`);
+    promises.push(newPlaylist);
+    Promise.all(promises).then((body) => {
+      let playlistID
+      body.forEach((id) => {
+        if (id) {
+          playlistID = id;
+        }
+      })
+      helpers.addTracks(req.params.user_id, playlistID, trackIDs);
+      res.send(`spotify:user:${req.params.user_id}:playlist:${playlistID}`);
+    });
+  })
 })
 
 // search for a playlist based on a query
