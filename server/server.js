@@ -28,18 +28,10 @@ app.get('/playlists/new/:query/:token', (req, res) => {
     });
     const newPlaylist = helpers.getUserInfo(token).then((user_id) => {
       userID = user_id;
-      helpers.createPlaylist(token, user_id, `Playlist for: ${req.params.query}`);
-    });
-    promises.push(newPlaylist);
-    Promise.all(promises).then((body) => {
-      let playlistID
-      body.forEach((id) => {
-        if (id) {
-          playlistID = id;
-        }
-      })
-      helpers.addTracks(token, userID, playlistID, trackIDs);
-      res.json(`spotify:user:${userID}:playlist:${playlistID}`);
+      helpers.createPlaylist(token, user_id, `Playlist for: ${req.params.query}`).then((data) => {
+         helpers.addTracks(token, userID, data, trackIDs);
+          res.json(`spotify:user:${userID}:playlist:${data}`);
+      });
     })
     .catch(error => {
       console.log('45', error);
