@@ -7,7 +7,7 @@ class Header extends Component {
 
   render() {
     return (
-      <h1>Welcome to Activity Playlist</h1>
+      <h1>Welcome to Faceroller Playlist</h1>
     )
   }
 }
