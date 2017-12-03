@@ -20,12 +20,30 @@ function extractTrackIDs(data) {
 }
 
 module.exports = {
-  getPlaylistsQuery: (query) => {
+  getUserInfo: (token) => {
+    return new Promise((resolve, reject) => {
+      const options = {
+        url: 'https://api.spotify.com/v1/me',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      request(options, function(err, response, body) {
+        if (response.statusCode === 200) {
+          resolve(JSON.parse(response.body).id);
+        } else {
+          console.log('it fucking broke @ getUserInfo. status:', response.statusCode);
+          reject(err);
+        }
+      });
+    });
+  },
+  getPlaylistsQuery: (token, query) => {
     return new Promise((resolve, reject) => {
       const options = {
         url: `https://api.spotify.com/v1/search?q=${query}&type=playlist&limit=3`,
         headers: {
-          'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
+          'Authorization': `Bearer ${token}`
         }
       };
       request(options, function(err, response, body) {
@@ -38,12 +56,12 @@ module.exports = {
       });
     });
   },
-  getTracksInPlaylist: (user_id, playlist_id) => {
+  getTracksInPlaylist: (token, user_id, playlist_id) => {
     return new Promise((resolve, reject) => {
       const options = {
         url: `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks?limit=10`,
         headers: {
-          'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
+          'Authorization': `Bearer ${token}`
         }
       };
       request(options, function(err, response, body) {
@@ -56,14 +74,15 @@ module.exports = {
       });
     });
   },
-  createPlaylist: (owner_id, name) => {
+  createPlaylist: (token, owner_id, name) => {
+    console.log('78', token);
     return new Promise((resolve, reject) => {
       const options = {
         url: `https://api.spotify.com/v1/users/${owner_id}/playlists`,
         method: 'POST',
         json: true,
         headers: {
-          'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
+          'Authorization': `Bearer ${token}`
         },
         body: {
           "description": "created by activity-playlist",
@@ -76,18 +95,19 @@ module.exports = {
           resolve(body.id);
         } else {
           console.log('it fucking broke @ createPlaylist. status:', response.statusCode);
+          console.log(err);
           reject(err);
         }
       });
     });
   },
-  addTracks: (user_id, playlist_id, tracks) => {
+  addTracks: (token, user_id, playlist_id, tracks) => {
     const options = {
       url: `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks`,
       method: 'POST',
       json: true,
       headers: {
-        'Authorization': `Bearer ${process.env.SPOTIFY_AUTH}`
+        'Authorization': `Bearer ${token}`
       },
       body: {
         "uris": tracks
@@ -98,7 +118,6 @@ module.exports = {
         return body;
       } else {
         console.log('it fucking broke @ addTracks. status:', response.statusCode);
-        reject(err);
       }
     });
   }

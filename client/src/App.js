@@ -30,11 +30,10 @@ class App extends Component {
       alert('Please enter a value to search');
     } else {
        jQuery.ajax({
-        url: `http://localhost:8080/playlists/new/${this.state.value}/`,
+        url: `http://localhost:8080/playlists/new/${this.state.value}/${this.state.token}`,
         dataType: "json",
-        data: {
-          token: { this.state.token }
-        },
+        type: 'GET',
+        // data: JSON.stringify({ 'token': this.state.token }),
         success: function(data) {
           this.setState({ greeting: `Your curated playlist for ${this.state.value}`, playlistUri: data });
         }.bind(this),
@@ -54,9 +53,8 @@ class App extends Component {
       if (authToken) {
         this.setState({ token: authToken[1] });
       } else {
-        window.location = "https://accounts.spotify.com/en/authorize?client_id=990e9989dedd40b1ad8d494562c74fb6&response_type=token&redirect_uri=http:%2F%2Flocalhost:3000%2Fcallback%2F"
+        window.location = "https://accounts.spotify.com/en/authorize?client_id=990e9989dedd40b1ad8d494562c74fb6&response_type=token&redirect_uri=http:%2F%2Flocalhost:3000%2Fcallback%2F&scope=playlist-modify-private%20playlist-read-private"
       }
-
     }
   }
 
