@@ -6,8 +6,7 @@ class TrackList extends Component {
   render() {
     var element = [];
     this.props.tracks.forEach((trackData) => {
-      console.log(trackData.track.album.images[2].url);
-      element.push(<Track thumbnail={trackData.track.album.images[2].url} />);
+      element.push(<Track thumbnail={trackData.track.album.images[2].url} uri={trackData.track.uri} currentUser={this.props.currentUser} />);
     });
     return (
       <p>
