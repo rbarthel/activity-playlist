@@ -52,6 +52,34 @@ app.delete('/users/:owner_id/playlists/:playlist_id/followers', (req, res) => {
   });
 })
 
+// generate a playlist based on a query
+app.get('/users/:user_id/playlists/new/:query', (req, res) => {
+  helpers.getPlaylistsQuery(req.params.query).then((playlistData) => {
+    const trackIDs = [];
+    const promises = playlistData.map((playlist) => {
+      return (
+        helpers.getTracksInPlaylist(playlist.user_id, playlist.playlist_id).then((tracksInPlaylist) => {
+          tracksInPlaylist.forEach((track) => {
+            trackIDs.push(`spotify:track:${track}`);
+          });
+        })
+      )
+    });
+    const newPlaylist = helpers.createPlaylist(req.params.user_id, `Playlist for: ${req.params.query}`);
+    promises.push(newPlaylist);
+    Promise.all(promises).then((body) => {
+      let playlistID
+      body.forEach((id) => {
+        if (id) {
+          playlistID = id;
+        }
+      })
+      helpers.addTracks(req.params.user_id, playlistID, trackIDs);
+      res.send(`spotify:user:${req.params.user_id}:playlist:${playlistID}`);
+    });
+  })
+})
+
 // search for a playlist based on a query
 app.get('/search/playlists/:query', (req, res) => {
   const options = {
@@ -62,8 +90,7 @@ app.get('/search/playlists/:query', (req, res) => {
   };
   request(options, function(err, response, body) {
     if (response.statusCode === 200) {
-      console.log(helpers.extractTrackRequestURLs(body));
-      res.send(helpers.extractTrackRequestURLs(body));
+      res.send(body);
     } else {
       res.sendStatus(400);
     }
