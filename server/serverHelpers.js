@@ -32,7 +32,8 @@ module.exports = {
         if (response.statusCode === 200) {
           resolve(extractPlaylistData(body));
         } else {
-          console.log('error: it fucking broke (getPlaylistsQuery)');
+          console.log('it fucking broke @ getPlaylistsQuery. status:', response.statusCode);
+          reject(err);
         }
       });
     });
@@ -49,7 +50,8 @@ module.exports = {
         if (response.statusCode === 200) {
           resolve(extractTrackIDs(body));
         } else {
-          console.log('error: it fucking broke (getTracksInPlaylist)');
+          console.log('it fucking broke @ getTracksInPlaylist. status:', response.statusCode);
+          reject(err);
         }
       });
     });
@@ -73,7 +75,8 @@ module.exports = {
         if (response.statusCode === 201) {
           resolve(body.id);
         } else {
-          console.log('error: it fucking broke (createPlaylist)');
+          console.log('it fucking broke @ createPlaylist. status:', response.statusCode);
+          reject(err);
         }
       });
     });
@@ -94,7 +97,8 @@ module.exports = {
       if (response.statusCode === 201) {
         return body;
       } else {
-        console.log('error: it fucking broke (addTracks)');
+        console.log('it fucking broke @ addTracks. status:', response.statusCode);
+        reject(err);
       }
     });
   }

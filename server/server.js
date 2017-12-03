@@ -76,7 +76,13 @@ app.get('/users/:user_id/playlists/new/:query', (req, res) => {
       })
       helpers.addTracks(req.params.user_id, playlistID, trackIDs);
       res.json(`spotify:user:${req.params.user_id}:playlist:${playlistID}`);
-    });
+    })
+    .catch(error => {
+      res.sendStatus(400);
+    })
+  })
+  .catch(error => {
+    res.sendStatus(400);
   })
 })
 
