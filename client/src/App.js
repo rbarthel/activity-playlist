@@ -9,7 +9,13 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: '', tracks: false, currentUser: null, greeting: "To get started, what kind of activity are you doing?"};
+    this.state = {
+      value: '',
+      playlistUri: false,
+      currentUser: null,
+      greeting: "To get started, what kind of activity are you doing?",
+      token: null
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,19 +29,11 @@ class App extends Component {
     if (!this.state.value) {
       alert('Please enter a value to search');
     } else {
-      var self = this;
-      jQuery.ajax({
-        url: `http://localhost:8080/search/playlists/${this.state.value}`,
-        dataType: 'json',
+       jQuery.ajax({
+        url: `http://localhost:8080/users/__natsy/playlists/new/${this.state.value}`,
+        dataType: "json",
         success: function(data) {
-          this.setState({ currentUser: data[0].user_id, greeting: `Your curated playlist for ${this.state.value}`})
-          jQuery.ajax({
-            url: `http://localhost:8080/users/${data[0].user_id}/playlists/${data[0].playlist_id}/tracks`,
-            dataType: 'json',
-            success: function(data) {
-              self.setState({tracks: data.items})
-            }
-          })
+          this.setState({ greeting: `Your curated playlist for ${this.state.value}`, playlistUri: data });
         }.bind(this),
         error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
@@ -43,6 +41,20 @@ class App extends Component {
       });
     }
     event.preventDefault();
+  }
+
+  componentWillMount() {
+    if (!this.state.token) {
+      var tokenRegex = /#access_token=(.*?)&/g;
+      var authToken = (tokenRegex.exec(window.location.href));
+
+      if (authToken) {
+        this.setState({ token: authToken[1] });
+      } else {
+        window.location = "https://accounts.spotify.com/en/authorize?client_id=990e9989dedd40b1ad8d494562c74fb6&response_type=token&redirect_uri=http:%2F%2Flocalhost:3000%2Fcallback%2F"
+      }
+
+    }
   }
 
   render() {
@@ -53,11 +65,10 @@ class App extends Component {
           <Header />
         </header>
         <div className='App-search-form'>
-          <p className="App-intro">
-            <Greeting message={this.state.greeting}/>
-          </p>
 
-          <DisplayArea currentUser={this.state.currentUser} tracks={this.state.tracks} handleSubmit={this.handleSubmit} handleChange={this.handleChange} value={this.state.value} />
+          <Greeting message={this.state.greeting}/>
+
+          <DisplayArea currentUser={this.state.currentUser} playlistUri={this.state.playlistUri} handleSubmit={this.handleSubmit} handleChange={this.handleChange} value={this.state.value} />
 
         </div>
       </div>

@@ -4,10 +4,10 @@ import TrackList from "./TrackList";
 
 class DisplayArea extends Component {
   render() {
-    if (this.props.tracks === false) {
+    if (this.props.playlistUri === false) {
       return (<SearchBar handleSubmit={this.props.handleSubmit} handleChange={this.props.handleChange} value={this.props.value} />)
     } else {
-      return (<TrackList tracks={this.props.tracks} currentUser={this.props.currentUser}/>)
+      return (<TrackList playlistUri={this.props.playlistUri} />)
     }
   }
 }

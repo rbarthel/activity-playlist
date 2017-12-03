@@ -4,13 +4,10 @@ import Track from "./Track.jsx"
 
 class TrackList extends Component {
   render() {
-    var element = [];
-    this.props.tracks.forEach((trackData) => {
-      element.push(<Track thumbnail={trackData.track.album.images[2].url} uri={trackData.track.uri} currentUser={this.props.currentUser} />);
-    });
+    var uri = `https://open.spotify.com/embed?uri=${this.props.playlistUri}`;
     return (
       <p>
-        {element}
+        <iframe src={uri} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
       </p>
     )
   }
