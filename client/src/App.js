@@ -13,7 +13,7 @@ class App extends Component {
       value: '',
       playlistUri: false,
       currentUser: null,
-      greeting: "To get started, what kind of activity are you doing?",
+      greeting: "To get started, what kind of activity/genre/mood are you feeling?",
       token: null
     };
 
@@ -33,7 +33,6 @@ class App extends Component {
         url: `http://localhost:8080/playlists/new/${this.state.value}/${this.state.token}`,
         dataType: "json",
         type: 'GET',
-        // data: JSON.stringify({ 'token': this.state.token }),
         success: function(data) {
           this.setState({ greeting: `Your curated playlist for ${this.state.value}`, playlistUri: data });
         }.bind(this),

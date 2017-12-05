@@ -41,7 +41,7 @@ module.exports = {
   getPlaylistsQuery: (token, query) => {
     return new Promise((resolve, reject) => {
       const options = {
-        url: `https://api.spotify.com/v1/search?q=${query}&type=playlist&limit=3`,
+        url: `https://api.spotify.com/v1/search?q=${query}&type=playlist&limit=6`,
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -59,7 +59,7 @@ module.exports = {
   getTracksInPlaylist: (token, user_id, playlist_id) => {
     return new Promise((resolve, reject) => {
       const options = {
-        url: `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks?limit=10`,
+        url: `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks?limit=12`,
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -75,7 +75,6 @@ module.exports = {
     });
   },
   createPlaylist: (token, owner_id, name) => {
-    console.log('78', token);
     return new Promise((resolve, reject) => {
       const options = {
         url: `https://api.spotify.com/v1/users/${owner_id}/playlists`,
@@ -102,7 +101,6 @@ module.exports = {
     });
   },
   addTracks: (token, user_id, playlist_id, tracks) => {
-    console.log(user_id, playlist_id, tracks);
     const options = {
       url: `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks`,
       method: 'POST',
